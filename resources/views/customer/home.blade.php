@@ -1,0 +1,9 @@
+<x-customer-layout>
+    <x-customer.sections.hero />
+    <x-customer.sections.flash-deals />
+    <x-customer.sections.category />
+    <x-customer.sections.shop />
+    <x-customer.sections.products-section />
+    <x-customer.sections.how-it-works />
+    <x-customer.sections.app-promo />
+</x-customer-layout>
