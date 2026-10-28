@@ -1,9 +1,9 @@
 <x-customer-layout>
-    <x-customer.sections.hero />
-    <x-customer.sections.flash-deals />
-    <x-customer.sections.category />
-    <x-customer.sections.shop />
-    <x-customer.sections.products-section />
-    <x-customer.sections.how-it-works />
-    <x-customer.sections.app-promo />
+    <x-customer.sections.home.hero />
+    <x-customer.sections.home.flash-deals />
+    <x-customer.sections.home.category />
+    <x-customer.sections.home.shop />
+    <x-customer.sections.home.products-section />
+    <x-customer.sections.home.how-it-works />
+    <x-customer.sections.home.app-promo />
 </x-customer-layout>

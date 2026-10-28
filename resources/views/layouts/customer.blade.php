@@ -13,13 +13,15 @@
         rel="stylesheet" />
 </head>
 
+
 <body class="bg-surface font-body-md text-body-md text-on-surface antialiased">
 
-    @include('layouts.navigation')
+    <x-customer.header />
     <main class="w-full pt-20 bg-surface min-h-[calc(100vh-20rem)]">
         {{ $slot }}
     </main>
-    @include('layouts.footer')
+    <x-customer.footer />
+    @stack('scripts')
 </body>
 
 </html>
