@@ -40,7 +40,7 @@ Route::get('/cart-checkout', function () {
     return view('customer.cart.index');
 })->name('cart');
 
-// Gộp chung và làm sạch các route của Seller
+// Seller
 Route::prefix('seller')->name('seller.')->group(function () {
     Route::get('/', function () {
         return view('seller.dashboard');
@@ -69,6 +69,17 @@ Route::prefix('seller')->name('seller.')->group(function () {
     Route::get('/shop/edit', function () {
         return view('seller.shop.edit');
     })->name('shop.edit');
+});
+
+// Admin
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('/', fn () => view('admin.dashboard'))->name('dashboard');
+    Route::get('/partners', fn () => view('admin.partners.index'))->name('partners.index');
+    Route::get('/drivers', fn () => view('admin.drivers.index'))->name('drivers.index');
+    Route::get('/disputes', fn () => view('admin.disputes.index'))->name('disputes.index');
+    Route::get('/settings', fn () => view('admin.settings.index'))->name('settings.index');
+    Route::get('/theme',    fn () => view('admin.theme.index'))->name('theme.index');
+    Route::get('/finance',  fn () => view('admin.finance.index'))->name('finance.index');
 });
 
 require __DIR__.'/auth.php';
