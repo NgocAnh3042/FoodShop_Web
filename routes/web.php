@@ -27,10 +27,16 @@ Route::middleware('auth')->group(function () {
     })->name('vouchers');
 });
 
-// Trang giới thiệu quán là công khai (khách chưa đăng nhập cũng quét QR vào được or link)
-Route::get('/shop/bep-hue-co-do', function () {
-    return view('customer.shop.referral');
-})->name('shop.referral');
+// Trang quán: một view dùng chung cho mọi quán
+Route::get('/shop/{slug}', function (string $slug) {
+    return view('customer.shop.show', [
+        'slug'         => $slug,
+        'referralCode' => 'BEPHUE',
+        // TẠM THỜI: thêm ?welcome=0 vào địa chỉ để xem trạng thái khách cũ.
+        // Sau này thay dòng này bằng điều kiện thật trong controller.
+        'showWelcome'  => request()->boolean('welcome', true),
+    ]);
+})->name('shop.show');
 
 Route::get('/deals',function(){
     return view('customer.deals');
