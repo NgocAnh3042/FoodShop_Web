@@ -80,10 +80,15 @@
 
             <!-- Ảnh đại diện / Profile -->
             <div class="flex items-center gap-space-xs pl-space-xs cursor-pointer group">
-                <img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlmbZQIR48Z2MRZJJwOdpMbcyN-pg8tSjmR7Nj1ditGYLYrjOcGYRKdiXx7EkqrTVt3mdx6fDI1Kl3EUqixpFUO8GzbhQH_Jy0SvrSsWseNJhTkCiqo9Xe_u_RY4jC1sXsvNOfEihGZabm8SboTxrxlYyL2CBWoi6XovhIGR59whq_qKlj2uesRtdbAEYYtTfBIVBVSV4A7lfD2ZyCtcHkxOwQhrm1Vj5l1l_x__0d-KD3Ls-AMRE6qA" />
-                <span
-                    class="material-symbols-outlined text-outline group-hover:text-on-surface text-[18px] transition-colors">arrow_drop_down</span>
+                <a href="{{ route('profile') }}">
+                    <img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlmbZQIR48Z2MRZJJwOdpMbcyN-pg8tSjmR7Nj1ditGYLYrjOcGYRKdiXx7EkqrTVt3mdx6fDI1Kl3EUqixpFUO8GzbhQH_Jy0SvrSsWseNJhTkCiqo9Xe_u_RY4jC1sXsvNOfEihGZabm8SboTxrxlYyL2CBWoi6XovhIGR59whq_qKlj2uesRtdbAEYYtTfBIVBVSV4A7lfD2ZyCtcHkxOwQhrm1Vj5l1l_x__0d-KD3Ls-AMRE6qA" />
+                    <span
+                        class="material-symbols-outlined text-outline group-hover:text-on-surface text-[18px] transition-colors">
+                        arrow_drop_down
+                    </span>
+                </a>
+
             </div>
         </div>
 

@@ -20,6 +20,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Kho voucher là dữ liệu cá nhân, nên đặt trong nhóm auth
+Route::middleware('auth')->group(function () {
+    Route::get('/vouchers', function () {
+        return view('customer.profile.vouchers');
+    })->name('vouchers');
+});
+
+// Trang giới thiệu quán là công khai (khách chưa đăng nhập cũng quét QR vào được or link)
+Route::get('/shop/bep-hue-co-do', function () {
+    return view('customer.shop.referral');
+})->name('shop.referral');
+
 Route::get('/deals',function(){
     return view('customer.deals');
 })->name('deals');
@@ -39,6 +51,10 @@ Route::get('/order', function () {
 Route::get('/cart-checkout', function () {
     return view('customer.cart.index');
 })->name('cart');
+
+Route::get('/profile', function () {
+    return view('customer.profile.vouchers');
+})->name('profile');
 
 // Seller
 Route::prefix('seller')->name('seller.')->group(function () {
