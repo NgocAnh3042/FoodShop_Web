@@ -33,6 +33,19 @@
             'route' => 'seller.reviews.index',
             'pattern' => 'seller.reviews.*',
         ],
+        [
+            'label' => 'Giao hàng',
+            'icon' => 'local_shipping',
+            'route' => 'seller.delivery.index',
+            'pattern' => 'seller.delivery.*',
+        ],
+        [
+            'label' => 'Giới thiệu & Nhận thưởng',
+            'icon' => 'redeem',
+            'route' => 'seller.referrals.index',
+            'pattern' => 'seller.referrals.*',
+            'badge' => 'Thưởng',
+        ],
         ['label' => 'Cài đặt quán', 'icon' => 'settings', 'route' => 'seller.shop.edit', 'pattern' => 'seller.shop.*'],
     ];
 @endphp

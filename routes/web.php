@@ -91,6 +91,14 @@ Route::prefix('seller')->name('seller.')->group(function () {
     Route::get('/shop/edit', function () {
         return view('seller.shop.edit');
     })->name('shop.edit');
+
+    Route::get('/delivery', function () {
+        return view('seller.delivery.index');
+    })->name('delivery.index');
+
+    Route::get('/referrals', function () {
+        return view('seller.referrals.index');
+    })->name('referrals.index');
 });
 
 // Admin
