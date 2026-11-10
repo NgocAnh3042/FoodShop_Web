@@ -7,9 +7,9 @@ Route::get('/', function () {
     return view('customer.home');
 })->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', fn () => redirect()->route('home'))
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 // Route::middleware chỉ người đã đăng nhập mới vào được chưa đăng nhập được thì chuyển về trang login
 // Chỉ chặn người chưa đăng nhập chứ không có lấy dữ liệu
@@ -19,6 +19,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
 
 // Kho voucher là dữ liệu cá nhân, nên đặt trong nhóm auth
 Route::middleware('auth')->group(function () {
