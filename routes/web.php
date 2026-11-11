@@ -1,33 +1,13 @@
 <?php
-
+use Illuminate\Http\Request;
+use App\Http\Controllers\Customer\AccountController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Driver;
 
-Route::get('/', function () {
-    return view('customer.home');
-})->name('home');
-
-Route::get('/dashboard', fn () => redirect()->route('home'))
+Route::get('/dashboard', fn (Request $request) => redirect()->route($request->user()->role->homeRoute()))
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
-
-// Route::middleware chỉ người đã đăng nhập mới vào được chưa đăng nhập được thì chuyển về trang login
-// Chỉ chặn người chưa đăng nhập chứ không có lấy dữ liệu
-// Đăng nhập thì sẽ đưa về giao diện profile
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-
-
-// Kho voucher là dữ liệu cá nhân, nên đặt trong nhóm auth
-Route::middleware('auth')->group(function () {
-    Route::get('/vouchers', function () {
-        return view('customer.profile.vouchers');
-    })->name('vouchers');
-});
 
 // Trang quán: một view dùng chung cho mọi quán
 Route::get('/shop/{slug}', function (string $slug) {
@@ -40,71 +20,48 @@ Route::get('/shop/{slug}', function (string $slug) {
     ]);
 })->name('shop.show');
 
-Route::get('/deals',function(){
-    return view('customer.deals');
-})->name('deals');
 
-Route::get('/home',function(){
-    return view('customer.home');
-})->name('home');
+// Tài khoản là dữ liệu cá nhân, bắt buộc phải đăng nhập.
+Route::middleware('auth')->group(function () {
+    Route::get('/account', [AccountController::class, 'vouchers'])->name('account');
 
-Route::get('/menu', function () {
-    return view('customer.menu');
-})->name('menu');
+    Route::prefix('account')->name('account.')->group(function () {
+        Route::get('/profile', [AccountController::class, 'profile'])->name('profile');
+        Route::get('/orders', [AccountController::class, 'orders'])->name('orders');
+        Route::get('/vouchers', [AccountController::class, 'vouchers'])->name('vouchers');
+        Route::get('/addresses', [AccountController::class, 'addresses'])->name('addresses');
+        Route::get('/favorites', [AccountController::class, 'favorites'])->name('favorites');
+    });
 
-Route::get('/order', function () {
-    return view('customer.orders.index');
-})->name('order');
+    // Giữ các URL cũ để liên kết đang dùng không bị hỏng.
+    Route::get('/profile', [AccountController::class, 'vouchers'])->name('profile');
+    Route::redirect('/vouchers', '/account/vouchers')->name('vouchers');
+    Route::redirect('/order', '/account/orders')->name('order');
+    Route::get('/cart-checkout', fn () => view('customer.cart.index'))->name('cart');
+});
 
-Route::get('/cart-checkout', function () {
-    return view('customer.cart.index');
-})->name('cart');
+// Trang chủ & Các trang công khai cho Customer
+Route::get('/', fn () => view('customer.home'))->name('home');
+Route::get('/home', fn () => view('customer.home'));
+Route::get('/deals', fn () => view('customer.deals'))->name('deals');
+Route::get('/menu', fn () => view('customer.menu'))->name('menu');
 
-Route::get('/profile', function () {
-    return view('customer.profile.vouchers');
-})->name('profile');
 
-// Seller
-Route::prefix('seller')->name('seller.')->group(function () {
-    Route::get('/', function () {
-        return view('seller.dashboard');
-    })->name('dashboard');
-
-    Route::get('/orders', function () {
-        return view('seller.orders.index');
-    })->name('orders.index');
-
-    Route::get('/products', function () {
-        return view('seller.products.index');
-    })->name('products.index');
-
-    Route::get('/reports', function () {
-        return view('seller.reports.index');
-    })->name('reports.index');
-
-    Route::get('/promotions', function () {
-        return view('seller.promotions.index');
-    })->name('promotions.index');
-
-    Route::get('/reviews', function () {
-        return view('seller.reviews.index');
-    })->name('reviews.index');
-
-    Route::get('/shop/edit', function () {
-        return view('seller.shop.edit');
-    })->name('shop.edit');
-
-    Route::get('/delivery', function () {
-        return view('seller.delivery.index');
-    })->name('delivery.index');
-
-    Route::get('/referrals', function () {
-        return view('seller.referrals.index');
-    })->name('referrals.index');
+// Seller (Người bán / Chủ quán)
+Route::prefix('seller')->name('seller.')->middleware(['auth', 'role:seller'])->group(function () {
+    Route::get('/', fn () => view('seller.dashboard'))->name('dashboard');
+    Route::get('/orders', fn () => view('seller.orders.index'))->name('orders.index');
+    Route::get('/products', fn () => view('seller.products.index'))->name('products.index');
+    Route::get('/reports', fn () => view('seller.reports.index'))->name('reports.index');
+    Route::get('/promotions', fn () => view('seller.promotions.index'))->name('promotions.index');
+    Route::get('/reviews', fn () => view('seller.reviews.index'))->name('reviews.index');
+    Route::get('/shop/edit', fn () => view('seller.shop.edit'))->name('shop.edit');
+    Route::get('/delivery', fn () => view('seller.delivery.index'))->name('delivery.index');
+    Route::get('/referrals', fn () => view('seller.referrals.index'))->name('referrals.index');
 });
 
 // Admin
-Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/', fn () => view('admin.dashboard'))->name('dashboard');
     Route::get('/partners', fn () => view('admin.partners.index'))->name('partners.index');
     Route::get('/drivers', fn () => view('admin.drivers.index'))->name('drivers.index');
@@ -113,5 +70,12 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/theme',    fn () => view('admin.theme.index'))->name('theme.index');
     Route::get('/finance',  fn () => view('admin.finance.index'))->name('finance.index');
 });
+
+// ---------- DRIVER ----------
+Route::middleware(['auth', 'role:driver'])
+    ->prefix('driver')->name('driver.')
+    ->group(function () {
+        Route::get('/', [Driver\DashboardController::class, 'index'])->name('dashboard');
+    });
 
 require __DIR__.'/auth.php';

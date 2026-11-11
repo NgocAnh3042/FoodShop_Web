@@ -1,16 +1,7 @@
-<x-customer-layout>
-    <div class="flex flex-col w-full">
-        <div class="w-full max-w-7xl mx-auto px-gutter py-space-lg flex flex-col gap-space-lg">
+<x-customer.account-layout title="Đơn hàng của tôi" :user="$user">
+    <div class="flex flex-col gap-space-lg">
 
-            <!-- Breadcrumb & Header -->
             <div class="flex flex-col gap-space-sm">
-                <nav class="flex items-center gap-space-xs text-on-surface-variant font-label-md">
-                    <a href="{{ route('home') }}" class="hover:text-primary transition-colors flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[16px]">home</span> Trang chủ
-                    </a>
-                    <span class="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
-                    <span class="text-primary font-bold">Đơn hàng của tôi</span>
-                </nav>
                 <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
                     <div>
                         <h1 class="font-headline-lg text-headline-lg text-on-surface font-extrabold tracking-tight">Đơn
@@ -49,6 +40,5 @@
             <!-- 2. Gọi Component Section: Lịch sử đơn hàng & Hỗ trợ -->
             <x-customer.sections.order.order-history-list />
 
-        </div>
     </div>
-</x-customer-layout>
+</x-customer.account-layout>

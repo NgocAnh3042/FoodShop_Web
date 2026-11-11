@@ -12,11 +12,16 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
+    // GET /register: Hiển thị giao diện (form) đăng ký tài khoản.
+    // POST /register: Xử lý dữ liệu do người dùng điền vào
+    // form để tạo tài khoản mới trong cơ sở dữ liệu.
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
+//     GET /login: Hiển thị giao diện form đăng nhập.
+//     POST /login: Xử lý thông tin đăng nhập (kiểm tra tài khoản/mật khẩu và tạo phiên làm việc - session).
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 

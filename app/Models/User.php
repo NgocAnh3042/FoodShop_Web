@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\UserRole;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -26,11 +28,30 @@ class User extends Authenticatable
             'phone_verified_at' => 'datetime',
             'last_login_at'     => 'datetime',
             'password'          => 'hashed',
+            'role'              => UserRole::class,
         ];
     }
 
-    public function isRole(string $role): bool
+    protected function maskedPhone(): Attribute
     {
+        return Attribute::get(function () {
+            $phone = (string) $this->phone;
+            if ($phone === '') {
+                return 'Chưa cập nhật';
+            }
+            if (strlen($phone) < 7) {
+                return $phone;
+            }
+            return substr($phone, 0, 4).' ••• '.substr($phone, -3);
+        });
+    }
+
+    public function isRole(UserRole|string $role): bool
+    {
+        if (is_string($role)) {
+            $role = UserRole::tryFrom($role);
+        }
+
         return $this->role === $role;
     }
 
